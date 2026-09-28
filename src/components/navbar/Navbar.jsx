@@ -88,12 +88,10 @@ const Navbar = () => {
 
 				<div className="flex justify-center items-center gap-3">
 
-					<Link to="/login">
-						<button className="bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base font-semibold">
-							Login
-						</button>
+					<Link to="/login" className="bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base font-semibold">
+						Login
 					</Link>
-
+ 
 					<Link to="/cart">
 						<button className="relative cursor-pointer">
 							<span className="absolute top-[-5px] bg-[red] right-0 text-white px-1 rounded-full text-xs ">
