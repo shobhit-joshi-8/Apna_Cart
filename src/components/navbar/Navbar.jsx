@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import { FaShoppingCart, FaBars } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 
-const Navbar = () => {
+const Navbar = ({ cart }) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleMenu = () => {
 		setIsOpen(!isOpen);
 	}
+
+	const cartCount = cart.reduce((total, item) => (total + item.quantity), 0);
 
 
 	return (
@@ -91,11 +93,11 @@ const Navbar = () => {
 					<Link to="/login" className="bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base font-semibold">
 						Login
 					</Link>
- 
+
 					<Link to="/cart">
 						<button className="relative cursor-pointer">
 							<span className="absolute top-[-5px] bg-[red] right-0 text-white px-1 rounded-full text-xs ">
-								0
+								{cartCount}
 							</span>
 
 							<FaShoppingCart size={25} />

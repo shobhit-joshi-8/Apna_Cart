@@ -29,7 +29,7 @@ const SignUp = () => {
     }
 
     return (
-        <Layout>
+        <div>
             <div className="relative">
                     <img
                         src={loginimage}
@@ -40,7 +40,7 @@ const SignUp = () => {
                     <div className="w-full h-50 bg-black absolute top-0 left-0 opacity-[.4]"></div>
 
                     <h2 className="absolute top-[40%] left-[10%] text-white font-semibold text-3xl md:text-5xl">
-                        Signup
+                        Signup 
                     </h2>
             </div>
 
@@ -107,7 +107,7 @@ const SignUp = () => {
                     </p>
                 </div>
             </div>
-        </Layout>
+        </div>
     )
 }
 

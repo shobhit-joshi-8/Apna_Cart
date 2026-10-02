@@ -5,24 +5,88 @@ import Home from './pages/home/Home'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/login/Login'
 import SignUp from './pages/signup/SignUp'
+import { useState } from 'react'
+import Layout from './components/layout/Layout'
 
 function App() {
 
-  return (
-    <>
-      <div>
-        <BrowserRouter>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/cart' element={<Cart />} />
-            <Route path='/allproducts' element={<AllProducts />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/signup' element={<SignUp />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
-    </>
-  )
+    const [cart, setCart] = useState([]);
+     const [promoCode, setPromoCode] = useState("");
+    const [discount, setDiscount] = useState(0);
+
+    const addToCart = (product) => {
+
+        const isProductExist = cart.find((item) => item.id === product.id);
+        if (isProductExist) {
+            const updatedCart = cart.map((item) =>
+                item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+            );
+            setCart(updatedCart);
+        }
+        else {
+            setCart([...cart, { ...product, quantity: 1 }]);
+        }
+
+    }
+
+    const handleItemIncrement = (itemId) => {
+        const updatedCart = cart.map((item) => (item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item));
+        setCart(updatedCart);
+    }
+
+    const handleItemDecrement = (itemId) => {
+        const updatedCart = cart.map((item) => (item.id === itemId && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item));
+        setCart(updatedCart);
+    }
+
+    const handleRemove = (itemId) => {
+        const updatedCart = cart.filter((item) => item.id !== itemId);
+        setCart(updatedCart);
+    }
+
+    const getTotalAmount = () => {
+        const totalPrice = cart.reduce((total, item) => {
+            return total +  item?.price * item.quantity;
+        }, 0);
+
+        return totalPrice - discount;
+    }
+
+    const finalAmount = () => {
+        return getTotalAmount() + 10;
+    }
+
+    
+
+    const applyPromoCode = () => {
+        if(promoCode == "DISCOUNT10" && finalAmount() > 10){
+            setDiscount(finalAmount() * 0.1)
+            setPromoCode("");
+        }
+        else{
+            alert("Invalid Coupon Code");
+        }
+    }
+
+
+    return (
+        <>
+            <div>
+                <BrowserRouter>
+                    <Layout cart={cart}>
+                        <Routes>
+                            <Route path='/' element={<Home />} />
+                            <Route path='/cart' element={<Cart cart={cart} promoCode={promoCode} setPromoCode={setPromoCode} applyPromoCode={applyPromoCode} finalAmount={finalAmount} handleItemIncrement={handleItemIncrement} handleItemDecrement={handleItemDecrement} handleRemove={handleRemove} getTotalAmount={getTotalAmount} />} />
+                            <Route path='/allproducts' element={<AllProducts addToCart={addToCart} />} />
+                            <Route path='/login' element={<Login />} />
+                            <Route path='/signup' element={<SignUp />} />
+                        </Routes>
+                    </Layout>
+                </BrowserRouter>
+
+            </div>
+        </>
+    )
 }
 
 export default App
