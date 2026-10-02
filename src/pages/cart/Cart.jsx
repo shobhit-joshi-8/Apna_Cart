@@ -1,13 +1,13 @@
-import React from "react";
+import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const Cart = ({ cart, handleItemIncrement, handleItemDecrement, handleRemove }) => {
+const Cart = ({ cart, handleItemIncrement, handleItemDecrement, handleRemove, getTotalAmount, finalAmount, applyPromoCode, promoCode, setPromoCode }) => {
 
-    
+   
     return (
         <div>
-            <div className="w-[90%] mx-auto mt-[80px]">
+            <div className="w-[90%] mx-auto mt-20">
                 <div className="container mx-auto mt-10">
                     <div className="flex flex-col lg:flex-row shadow-md my-10">
                         <div className="w-full lg:w-3/4 bg-white px-10 py-10">
@@ -88,7 +88,7 @@ const Cart = ({ cart, handleItemIncrement, handleItemDecrement, handleRemove }) 
                                     </span>
 
                                     <span className="text-center w-1/5 font-semibold text-sm">
-                                        {item.price * item.quantity} Rs.
+                                        {(item.price * item.quantity).toFixed(2)} Rs.
                                     </span>
                                 </div>
                             ))}
@@ -122,7 +122,7 @@ const Cart = ({ cart, handleItemIncrement, handleItemDecrement, handleRemove }) 
                                 </span>
 
                                 <span className="font-semibold text-sm">
-                                    3829.96
+                                    {getTotalAmount().toFixed(2)} Rs.
                                 </span>
                             </div>
 
@@ -152,17 +152,16 @@ const Cart = ({ cart, handleItemIncrement, handleItemDecrement, handleRemove }) 
                                     type="text"
                                     id="promo"
                                     placeholder="Enter your code"
-                                    className="p-2 text-sm w-full"
-                                    value=""
-                                    readOnly
+                                    className="p-2 text-sm w-full mb-5"
+                                    value={promoCode}
+                                    onChange={(e) => setPromoCode(e.target.value)}
                                 />
 
                                 <span>use DISCOUNT10</span>
 
-                                <hr />
                             </div>
 
-                            <button className="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white uppercase">
+                            <button className="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white uppercase" onClick={applyPromoCode}>
                                 Apply
                             </button>
 
@@ -171,7 +170,7 @@ const Cart = ({ cart, handleItemIncrement, handleItemDecrement, handleRemove }) 
                                 <div className="flex font-semibold justify-between py-6 text-sm uppercase">
                                     <span>Total cost</span>
 
-                                    <span>3839.96</span>
+                                    <span>{finalAmount().toFixed(2)} Rs.</span>
                                 </div>
 
                                 <button
