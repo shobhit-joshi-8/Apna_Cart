@@ -11,6 +11,8 @@ import Layout from './components/layout/Layout'
 function App() {
 
     const [cart, setCart] = useState([]);
+     const [promoCode, setPromoCode] = useState("");
+    const [discount, setDiscount] = useState(0);
 
     const addToCart = (product) => {
 
@@ -42,6 +44,31 @@ function App() {
         setCart(updatedCart);
     }
 
+    const getTotalAmount = () => {
+        const totalPrice = cart.reduce((total, item) => {
+            return total +  item?.price * item.quantity;
+        }, 0);
+
+        return totalPrice - discount;
+    }
+
+    const finalAmount = () => {
+        return getTotalAmount() + 10;
+    }
+
+    
+
+    const applyPromoCode = () => {
+        if(promoCode == "DISCOUNT10" && finalAmount() > 10){
+            setDiscount(finalAmount() * 0.1)
+            setPromoCode("");
+        }
+        else{
+            alert("Invalid Coupon Code");
+        }
+    }
+
+
     return (
         <>
             <div>
@@ -49,7 +76,7 @@ function App() {
                     <Layout cart={cart}>
                         <Routes>
                             <Route path='/' element={<Home />} />
-                            <Route path='/cart' element={<Cart cart={cart} handleItemIncrement={handleItemIncrement} handleItemDecrement={handleItemDecrement} handleRemove={handleRemove} />} />
+                            <Route path='/cart' element={<Cart cart={cart} promoCode={promoCode} setPromoCode={setPromoCode} applyPromoCode={applyPromoCode} finalAmount={finalAmount} handleItemIncrement={handleItemIncrement} handleItemDecrement={handleItemDecrement} handleRemove={handleRemove} getTotalAmount={getTotalAmount} />} />
                             <Route path='/allproducts' element={<AllProducts addToCart={addToCart} />} />
                             <Route path='/login' element={<Login />} />
                             <Route path='/signup' element={<SignUp />} />
