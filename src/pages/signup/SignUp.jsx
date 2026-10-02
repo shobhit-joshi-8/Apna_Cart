@@ -1,8 +1,33 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Layout from '../../components/layout/Layout'
 import { Link } from 'react-router-dom'
 import loginimage from '../../assets/login_page_image.png'
 
 const SignUp = () => {
+    // const data = 
+    const [userSignupData, setUserSignupData] = useState({
+        userName: "",
+        email: "",
+        password: ""
+    });
+
+    const handleSiugnupData = (e) => {
+       
+        setUserSignupData({...userSignupData, [e.target.name]: e.target.value})
+         console.log(userSignupData)
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if(!userSignupData.name || !userSignupData.email || !userSignupData.password){
+            alert("All fields are required");
+        }
+        else{
+            
+        }
+
+    }
+
     return (
         <div>
             <div className="relative">
@@ -27,15 +52,16 @@ const SignUp = () => {
 
                     <div className="relative mb-4">
                         <label htmlFor="email" className="leading-7 text-sm">
-                            Nmae
+                            Name
                         </label>
 
                         <input
                             autoComplete="off"
                             type="text"
-                            name="name"
+                            name="userName"
                             className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                            value=""
+                            value={userSignupData.userName}
+                            onChange={handleSiugnupData}
                         />
                     </div>
 
@@ -49,7 +75,8 @@ const SignUp = () => {
                             type="email"
                             name="email"
                             className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                            value=""
+                            value={userSignupData.email}
+                            onChange={handleSiugnupData}
                         />
                     </div>
 
@@ -63,11 +90,12 @@ const SignUp = () => {
                             type="password"
                             name="password"
                             className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                            value=""
+                            value={userSignupData.password}
+                            onChange={handleSiugnupData}
                         />
                     </div>
 
-                    <button className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                    <button className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" onClick={handleSubmit}>
                         Sign Up
                     </button>
 
