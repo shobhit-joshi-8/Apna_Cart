@@ -1,11 +1,10 @@
 import React from 'react'
-import Layout from '../../components/layout/Layout'
 import { Link } from 'react-router-dom'
 import loginimage from '../../assets/login_page_image.png'
 
 const SignUp = () => {
     return (
-        <Layout>
+        <div>
             <div className="relative">
                     <img
                         src={loginimage}
@@ -80,7 +79,7 @@ const SignUp = () => {
                     </p>
                 </div>
             </div>
-        </Layout>
+        </div>
     )
 }
 

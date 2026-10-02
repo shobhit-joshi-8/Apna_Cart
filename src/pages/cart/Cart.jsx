@@ -1,11 +1,12 @@
 import React from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import Layout from "../../components/layout/Layout";
 import { Link } from "react-router-dom";
 
-const Cart = () => {
+const Cart = ({ cart, handleItemIncrement, handleItemDecrement, handleRemove }) => {
+
+    
     return (
-        <Layout>
+        <div>
             <div className="w-[90%] mx-auto mt-[80px]">
                 <div className="container mx-auto mt-10">
                     <div className="flex flex-col lg:flex-row shadow-md my-10">
@@ -16,7 +17,7 @@ const Cart = () => {
                                 </h1>
 
                                 <h2 className="font-semibold text-2xl uppercase">
-                                    3 Items
+                                    {cart?.length} Items
                                 </h2>
                             </div>
 
@@ -38,171 +39,70 @@ const Cart = () => {
                                 </h3>
                             </div>
 
-                            {/* Product 1 */}
-                            <div className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
-                                <div className="flex w-2/5">
-                                    <div className="w-20">
-                                        <img
-                                            className="h-24"
-                                            src="https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp"
-                                            alt=""
-                                        />
+                            {cart?.map((item) => (
+                                <div key={item.id} className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
+                                    <div className="flex w-2/5">
+                                        <div className="w-20">
+                                            <img
+                                                className="h-24"
+                                                src={item.thumbnail}
+                                                alt=""
+                                            />
+                                        </div>
+
+                                        <div className="flex flex-col justify-between ml-4 flex-grow">
+                                            <span className="font-bold text-sm">
+                                                {item.title}    
+                                            </span>
+
+                                            <span className="text-red-500 text-xs">
+                                                {item.category}
+                                            </span>
+
+                                            <a
+                                                href="#"
+                                                className="font-semibold hover:text-red-500 text-gray-500 text-xs"
+                                                onClick={() => handleRemove(item.id)}
+                                            >
+                                                Remove
+                                            </a>
+                                        </div>
                                     </div>
 
-                                    <div className="flex flex-col justify-between ml-4 flex-grow">
-                                        <span className="font-bold text-sm">
-                                            Essence Mascara Lash Princess
-                                        </span>
+                                    <div className="flex justify-center w-1/5">
+                                        <button className="border px-2 py-1" onClick={() => handleItemDecrement(item.id)}>
+                                            -
+                                        </button>
 
-                                        <span className="text-red-500 text-xs">
-                                            beauty
-                                        </span>
+                                        <button className="px-2">
+                                            {item.quantity}
+                                        </button>
 
-                                        <a
-                                            href="#"
-                                            className="font-semibold hover:text-red-500 text-gray-500 text-xs"
-                                        >
-                                            Remove
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div className="flex justify-center w-1/5">
-                                    <button className="border px-2 py-1">
-                                        -
-                                    </button>
-
-                                    <button className="px-2">
-                                        1
-                                    </button>
-
-                                    <button className="border px-2 py-1">
-                                        +
-                                    </button>
-                                </div>
-
-                                <span className="text-center w-1/5 font-semibold text-sm">
-                                    9.99 Rs.
-                                </span>
-
-                                <span className="text-center w-1/5 font-semibold text-sm">
-                                    9.99 Rs.
-                                </span>
-                            </div>
-
-                            {/* Product 2 */}
-                            <div className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
-                                <div className="flex w-2/5">
-                                    <div className="w-20">
-                                        <img
-                                            className="h-24"
-                                            src="https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp"
-                                            alt=""
-                                        />
+                                        <button className="border px-2 py-1" onClick={() => handleItemIncrement(item.id)}>
+                                            +
+                                        </button>
                                     </div>
 
-                                    <div className="flex flex-col justify-between ml-4 flex-grow">
-                                        <span className="font-bold text-sm">
-                                            Eyeshadow Palette with Mirror
-                                        </span>
+                                    <span className="text-center w-1/5 font-semibold text-sm">
+                                        {item.price} Rs.
+                                    </span>
 
-                                        <span className="text-red-500 text-xs">
-                                            beauty
-                                        </span>
-
-                                        <a
-                                            href="#"
-                                            className="font-semibold hover:text-red-500 text-gray-500 text-xs"
-                                        >
-                                            Remove
-                                        </a>
-                                    </div>
+                                    <span className="text-center w-1/5 font-semibold text-sm">
+                                        {item.price * item.quantity} Rs.
+                                    </span>
                                 </div>
+                            ))}
 
-                                <div className="flex justify-center w-1/5">
-                                    <button className="border px-2 py-1">
-                                        -
-                                    </button>
-
-                                    <button className="px-2">
-                                        1
-                                    </button>
-
-                                    <button className="border px-2 py-1">
-                                        +
-                                    </button>
-                                </div>
-
-                                <span className="text-center w-1/5 font-semibold text-sm">
-                                    19.99 Rs.
-                                </span>
-
-                                <span className="text-center w-1/5 font-semibold text-sm">
-                                    19.99 Rs.
-                                </span>
-                            </div>
-
-                            {/* Product 3 */}
-                            <div className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
-                                <div className="flex w-2/5">
-                                    <div className="w-20">
-                                        <img
-                                            className="h-24"
-                                            src="https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-bed/thumbnail.webp"
-                                            alt=""
-                                        />
-                                    </div>
-
-                                    <div className="flex flex-col justify-between ml-4 flex-grow">
-                                        <span className="font-bold text-sm">
-                                            Annibale Colombo Bed
-                                        </span>
-
-                                        <span className="text-red-500 text-xs">
-                                            furniture
-                                        </span>
-
-                                        <a
-                                            href="#"
-                                            className="font-semibold hover:text-red-500 text-gray-500 text-xs"
-                                        >
-                                            Remove
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div className="flex justify-center w-1/5">
-                                    <button className="border px-2 py-1">
-                                        -
-                                    </button>
-
-                                    <button className="px-2">
-                                        2
-                                    </button>
-
-                                    <button className="border px-2 py-1">
-                                        +
-                                    </button>
-                                </div>
-
-                                <span className="text-center w-1/5 font-semibold text-sm">
-                                    1899.99 Rs.
-                                </span>
-
-                                <span className="text-center w-1/5 font-semibold text-sm">
-                                    3799.98 Rs.
-                                </span>
-                            </div>
-
+                          
                             {/* Continue Shopping */}
                             <p className="flex font-semibold text-indigo-600 text-sm mt-10 cursor-pointer">
                                 <Link to="/allProducts" className="flex items-center">
-                                <FaArrowLeft
-                                    className="mr-2 text-indigo-600"
-                                    size={16}
-                                />
+                                    <FaArrowLeft
+                                        className="mr-2 text-indigo-600"
+                                        size={16}
+                                    />
 
-                                Continue Shopping
+                                    Continue Shopping
                                 </Link>
                             </p>
                         </div>
@@ -218,7 +118,7 @@ const Cart = () => {
 
                             <div className="flex justify-between mt-10 mb-5">
                                 <span className="font-semibold text-sm uppercase">
-                                    Items 0
+                                    Items {cart?.length}
                                 </span>
 
                                 <span className="font-semibold text-sm">
@@ -296,7 +196,7 @@ const Cart = () => {
                     pointerEvents: "none",
                 }}
             ></div>
-        </Layout>
+        </div>
     );
 };
 

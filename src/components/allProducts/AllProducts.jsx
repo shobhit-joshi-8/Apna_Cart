@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import Layout from '../layout/Layout'
 import axios from 'axios';
 import loginimage from '../../assets/login_page_image.png'
 
-const AllProducts = () => {
+const AllProducts = ({addToCart}) => {
     const [allCategories, setAllCategories] = useState([]);
     const [products, setProducts] = useState([]);
 
@@ -71,7 +70,7 @@ const AllProducts = () => {
     }
 
     return (
-        <Layout>
+        <div>
             <div className="relative">
                 <img
                     src={loginimage}
@@ -87,14 +86,12 @@ const AllProducts = () => {
             </div>
 
             {/* Categories List */}
-            <div className="h-1/5 flex flex-wrap gap-5">
-                <select onChange={(e) => filterProducts(e.target.value)} className="w-[200px] h-[50px] bg-indigo-500 rounded-lg p-2 text-white">
+            <div className="h-1/5 flex flex-wrap gap-5 justify-center items-center mt-5 mb-5">
+                <select onChange={(e) => filterProducts(e.target.value)} className="w-[200px] h-[50px] bg-red-500 rounded-lg p-2 text-white">
                     <option value="all">All Categories</option>
                     {allCategories.filter((filterItem) => !["laptops", "motorcycle", "furniture"].includes(filterItem)).map((item, index) => (
-                        <option value={item} key={index}>
-                            <button className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-                                {item}
-                            </button>
+                        <option value={item} key={index} className="capitalize text-white red-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                            {item}
                         </option>
                     ))}
                 </select>
@@ -141,7 +138,7 @@ const AllProducts = () => {
                                             Price: {product.price} Rs.
                                         </p>
 
-                                        <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-m rounded-lg text-sm px-2 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        <button onClick={() => addToCart(product)} className="text-white bg-red-500 hover:bg-red-500 focus:ring-4 focus:ring-blue-300 font-m rounded-lg text-sm px-2 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:bg-red-800">
                                             Add to cart
                                         </button>
                                     </div>
@@ -151,7 +148,7 @@ const AllProducts = () => {
                     </div>
                 </div>
             </section>
-        </Layout>
+        </div>
     )
 }
 
