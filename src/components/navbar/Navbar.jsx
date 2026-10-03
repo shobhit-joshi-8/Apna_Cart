@@ -39,17 +39,17 @@ const Navbar = ({ cart }) => {
 							</li>
 						</Link>
 
-						<Link to="/about">
+						{/* <Link to="/about">
 							<li className="mr-5 hover:text-gray-900 cursor-pointer">
 								About
 							</li>
-						</Link>
+						</Link> */}
 
-						<Link to="/Contact">
+						{/* <Link to="/Contact">
 							<li className="mr-5 hover:text-gray-900 cursor-pointer">
 								Contact
 							</li>
-						</Link>
+						</Link> */}
 					</ul>
 				</div>
 
@@ -68,17 +68,17 @@ const Navbar = ({ cart }) => {
 								</li>
 							</Link>
 
-							<Link to="/about">
+							{/* <Link to="/about">
 								<li className="mt-5 hover:text-gray-900 cursor-pointer">
 									About
 								</li>
-							</Link>
+							</Link> */}
 
-							<Link to="/Contact">
+							{/* <Link to="/Contact">
 								<li className="mt-5 hover:text-gray-900 cursor-pointer">
 									Contact
 								</li>
-							</Link>
+							</Link> */}
 						</ul>
 						<button className="absolute top-[75px] z-10 right-0 text-white py-2 px-4 cursor-pointer" onClick={toggleMenu}>
 							<RxCross2 size={30} />
