@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import loginimage from '../../assets/login_page_image.png'
 
-const AllProducts = ({addToCart}) => {
+const AllProducts = ({ addToCart }) => {
     const [allCategories, setAllCategories] = useState([]);
+    const [allProducts, setAllProducts] = useState([]);
     const [products, setProducts] = useState([]);
+    const [searchItem, setSearchItem] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('all');
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         getCategoryList();
@@ -30,8 +34,12 @@ const AllProducts = ({addToCart}) => {
     const getAllProductsByCategory = async (categoryName) => {
         try {
             if (categoryName) {
+                setLoading(true);
                 const response = await axios(`https://dummyjson.com/products/category/${categoryName}`);
-                setProducts(response?.data?.products);
+                const categoryProducts = response?.data?.products;
+
+                setAllProducts(categoryProducts);
+                setProducts(categoryProducts);
             }
         } catch (error) {
             console.error("Failed to fetch Products by category:", {
@@ -40,15 +48,20 @@ const AllProducts = ({addToCart}) => {
                 endpoint: error.config?.url,
             });
         }
+        finally {
+            setLoading(false);
+        }
     };
 
     const filterProducts = (categoryName) => {
         try {
+            setSelectedCategory(categoryName);
+
+            // Reset search whenever category changes
+            setSearchItem('');
             if (categoryName === "all") {
-                // Show all products without making another API call
                 getAllProducts();
             } else {
-                // Fetch products according to selected category
                 getAllProductsByCategory(categoryName);
             }
         } catch (error) {
@@ -58,15 +71,35 @@ const AllProducts = ({addToCart}) => {
 
     const getAllProducts = async () => {
         try {
+            setLoading(true);
             const response = await axios(`https://dummyjson.com/products?limit=0`);
-            setProducts(response?.data?.products);
+            const fetchedProducts = response?.data?.products;
+            setProducts(fetchedProducts);
+            setAllProducts(fetchedProducts);
         } catch (error) {
             console.error("Failed to fetch Products:", {
                 message: error.message,
                 status: error.response?.status,
                 endpoint: error.config?.url,
             });
+        } finally {
+            setLoading(false);
         }
+    }
+
+    const handleSearchItem = (e) => {
+        const query = e.target.value.toLowerCase();;
+        setSearchItem(query);
+    }
+
+    // Categories which don't want to show
+    const filteredCategories = allCategories.filter(
+        (category) =>
+            !['laptops', 'motorcycle', 'furniture'].includes(category));
+
+    const handleSearchByButton = () => {
+        const filteredProducts = allProducts?.filter((item) => item?.title?.toLowerCase().includes(searchItem));
+        setProducts(filteredProducts);
     }
 
     return (
@@ -87,9 +120,9 @@ const AllProducts = ({addToCart}) => {
 
             {/* Categories List */}
             <div className="h-1/5 flex flex-wrap gap-5 justify-center items-center mt-5 mb-5">
-                <select onChange={(e) => filterProducts(e.target.value)} className="w-[200px] h-[50px] bg-red-500 rounded-lg p-2 text-white">
+                <select onChange={(e) => filterProducts(e.target.value)} value={selectedCategory} className="w-[200px] h-[50px] bg-red-500 rounded-lg p-2 text-white">
                     <option value="all">All Categories</option>
-                    {allCategories.filter((filterItem) => !["laptops", "motorcycle", "furniture"].includes(filterItem)).map((item, index) => (
+                    {filteredCategories.map((item, index) => (
                         <option value={item} key={index} className="capitalize text-white red-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
                             {item}
                         </option>
@@ -97,55 +130,78 @@ const AllProducts = ({addToCart}) => {
                 </select>
             </div>
 
-            {/* Product List */}
-            {/* <div className="h-screen flex flex-wrap gap-5">
-                {products?.map((product) => (
-                    <div key={product.id}>
-                        <img src={product.thumbnail} alt={product.title} />
-                        <h3>title: {product.title}</h3>
-                        <p>price: {product.price}</p>
-                    </div>
-                ))}
-            </div> */}
+            {/* Search Filter */}
 
-            <section className="text-gray-600 body-font w-[80%] mx-auto">
-                <div className="container px-5 py-24 mx-auto">
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {products?.map((product) => (
-                            <div key={product.id} className="w-[90%] px-4 py-4 shadow-lg rounded-md">
-                                <a
-                                    className="block relative h-48 rounded overflow-hidden"
-                                    href={`/singleProduct/${product.id}`}
+            <div className='text-center'>
+                <input placeholder='Search Item' className='border px-2 py-2 ' onChange={handleSearchItem} value={searchItem} />
+                <button className='bg-black text-white px-2 py-2 ml-4 rounded-md ' onClick={handleSearchByButton}>Search Products</button>
+            </div>
+
+
+            <section className="text-gray-600 body-font w-[90%] mx-auto">
+                <div className="container w-full  py-10 md:mx-0 mx-auto">
+
+                    {loading ? (
+                        <div className="text-center py-10">
+                            <p className="text-lg font-semibold">
+                                Loading products...
+                            </p>
+                        </div>
+                    ) : products.length === 0 ? (<div className="text-center py-2">
+                        <p className="text-lg font-semibold">
+                            No products found.
+                        </p>
+                    </div>) : (
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+                            {products?.map((product) => (
+                                <div
+                                    key={product.id}
+                                    className="h-full bg-white px-4 py-4 shadow-md hover:shadow-xl rounded-lg border border-gray-100 flex flex-col"
                                 >
-                                    <img
-                                        alt="ecommerce"
-                                        className="object-cover object-center w-full h-full block rounded-t-lg"
-                                        src={product.thumbnail}
-                                    />
-                                </a>
+                                    {/* Product Image */}
+                                    <a
+                                        className="block relative h-52 w-full rounded-lg overflow-hidden bg-gray-50 flex-shrink-0"
+                                        href={`/singleProduct/${product.id}`}
+                                    >
+                                        <img
+                                            src={product.thumbnail}
+                                            alt={product.title}
+                                            className="w-full h-full object-contain p-3 block transition-transform duration-300 hover:scale-105"
+                                        />
+                                    </a>
 
-                                <div className="mt-4">
-                                    <h2 className="text-gray-900 title-font text-lg font-medium mt-2 mb-2">
-                                        {product.title}
-                                    </h2>
+                                    {/* Product Details */}
+                                    <div className="mt-4 flex flex-col flex-grow">
 
-                                    <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
-                                        {product.rating}
-                                    </span>
+                                        {/* Product Title */}
+                                        <h2 className="text-gray-900 text-lg font-medium leading-6 line-clamp-2 min-h-[48px]">
+                                            {product.title}
+                                        </h2>
 
-                                    <div className="flex justify-between mt-3 flex-col sm:flex-row">
-                                        <p className="mt-1 mb-2 sm:mb-0 text-[15px] sm:text-[20px] font-bold text-gray-900 dark:text-white">
-                                            Price: {product.price} Rs.
-                                        </p>
+                                        {/* Rating */}
+                                        <div className="mt-3">
+                                            <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1 rounded">
+                                                ⭐ {product.rating}
+                                            </span>
+                                        </div>
 
-                                        <button onClick={() => addToCart(product)} className="text-white bg-red-500 hover:bg-red-500 focus:ring-4 focus:ring-blue-300 font-m rounded-lg text-sm px-2 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:bg-red-800">
-                                            Add to cart
-                                        </button>
+                                        {/* Bottom Section */}
+                                        <div className="mt-auto pt-5 flex items-center justify-between gap-3">
+                                            <p className="text-[16px] sm:text-[18px] font-bold text-gray-900 whitespace-nowrap">
+                                                ₹{product.price}
+                                            </p>
+
+                                            <button
+                                                onClick={() => addToCart(product)}
+                                                className="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 transition-colors whitespace-nowrap"
+                                            >
+                                                Add to cart
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>)}
                 </div>
             </section>
         </div>
