@@ -10,7 +10,7 @@ const Navbar = ({ cart }) => {
 		setIsOpen(!isOpen);
 	}
 
-	const cartCount = cart.reduce((total, item) => (total + item.quantity), 0);
+	const cartCount = cart?.reduce((total, item) => (total + item.quantity), 0);
 
 
 	return (

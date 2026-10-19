@@ -7,11 +7,14 @@ import Login from './pages/login/Login'
 import SignUp from './pages/signup/SignUp'
 import { useState } from 'react'
 import Layout from './components/layout/Layout'
+import ProductDetails from './pages/product-details/ProductDetails'
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
     const [cart, setCart] = useState([]);
-     const [promoCode, setPromoCode] = useState("");
+    const [promoCode, setPromoCode] = useState("");
     const [discount, setDiscount] = useState(0);
 
     const addToCart = (product) => {
@@ -26,6 +29,8 @@ function App() {
         else {
             setCart([...cart, { ...product, quantity: 1 }]);
         }
+
+        toast.success('Added!')
 
     }
 
@@ -46,7 +51,7 @@ function App() {
 
     const getTotalAmount = () => {
         const totalPrice = cart.reduce((total, item) => {
-            return total +  item?.price * item.quantity;
+            return total + item?.price * item.quantity;
         }, 0);
 
         return totalPrice - discount;
@@ -56,14 +61,14 @@ function App() {
         return getTotalAmount() + 10;
     }
 
-    
+
 
     const applyPromoCode = () => {
-        if(promoCode == "DISCOUNT10" && finalAmount() > 10){
+        if (promoCode == "DISCOUNT10" && finalAmount() > 10) {
             setDiscount(finalAmount() * 0.1)
             setPromoCode("");
         }
-        else{
+        else {
             alert("Invalid Coupon Code");
         }
     }
@@ -72,6 +77,18 @@ function App() {
     return (
         <>
             <div>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
                 <BrowserRouter>
                     <Layout cart={cart}>
                         <Routes>
@@ -80,6 +97,8 @@ function App() {
                             <Route path='/allproducts' element={<AllProducts addToCart={addToCart} />} />
                             <Route path='/login' element={<Login />} />
                             <Route path='/signup' element={<SignUp />} />
+                            <Route path='/product-details/:id' element={<ProductDetails addToCart={addToCart} />} />
+
                         </Routes>
                     </Layout>
                 </BrowserRouter>
