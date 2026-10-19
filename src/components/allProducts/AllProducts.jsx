@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import loginimage from '../../assets/login_page_image.png'
+import { Link } from 'react-router-dom';
 
 const AllProducts = ({ addToCart }) => {
     const [allCategories, setAllCategories] = useState([]);
@@ -120,7 +121,7 @@ const AllProducts = ({ addToCart }) => {
 
             {/* Categories List */}
             <div className="h-1/5 flex flex-wrap gap-5 justify-center items-center mt-5 mb-5">
-                <select onChange={(e) => filterProducts(e.target.value)} value={selectedCategory} className="w-[200px] h-[50px] bg-red-500 rounded-lg p-2 text-white">
+                <select onChange={(e) => filterProducts(e.target.value)} value={selectedCategory} className="w-50 h-12.5 bg-red-500 rounded-lg p-2 text-white">
                     <option value="all">All Categories</option>
                     {filteredCategories.map((item, index) => (
                         <option value={item} key={index} className="capitalize text-white red-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
@@ -159,22 +160,22 @@ const AllProducts = ({ addToCart }) => {
                                     className="h-full bg-white px-4 py-4 shadow-md hover:shadow-xl rounded-lg border border-gray-100 flex flex-col"
                                 >
                                     {/* Product Image */}
-                                    <a
-                                        className="block relative h-52 w-full rounded-lg overflow-hidden bg-gray-50 flex-shrink-0"
-                                        href={`/singleProduct/${product.id}`}
+                                    <Link
+                                        to={`/product-details/${product?.id}`}
+                                        className="block relative h-52 w-full rounded-lg overflow-hidden bg-gray-50 shrink-0"
                                     >
                                         <img
                                             src={product.thumbnail}
                                             alt={product.title}
                                             className="w-full h-full object-contain p-3 block transition-transform duration-300 hover:scale-105"
                                         />
-                                    </a>
+                                    </Link>
 
                                     {/* Product Details */}
-                                    <div className="mt-4 flex flex-col flex-grow">
+                                    <div className="mt-4 flex flex-col grow">
 
                                         {/* Product Title */}
-                                        <h2 className="text-gray-900 text-lg font-medium leading-6 line-clamp-2 min-h-[48px]">
+                                        <h2 className="text-gray-900 text-lg font-medium leading-6 line-clamp-2 min-h-12">
                                             {product.title}
                                         </h2>
 
