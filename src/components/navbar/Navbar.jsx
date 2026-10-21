@@ -56,13 +56,13 @@ const Navbar = ({ cart }) => {
 				{
 					isOpen ? (<div className="">
 						<ul className="flex absolute flex-col gap-10 left-0 h-screen w-full top-[73px] h-auto z-10 bg-red-500 text-white items-center text-lg justify-center font-semibold">
-							<Link to="/">
+							<Link to="/" onClick={() => setIsOpen(false)}>
 								<li className="mt-5 hover:text-gray-900 cursor-pointer">
 									Home
 								</li>
 							</Link>
 
-							<Link to="/allproducts">
+							<Link to="/allproducts" onClick={() => setIsOpen(false)}>
 								<li className="mt-5 hover:text-gray-900 cursor-pointer">
 									All Products
 								</li>
